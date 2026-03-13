@@ -3,6 +3,7 @@ package com.project.code.Model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
@@ -17,8 +18,8 @@ public class Customer {
     @NotBlank(message = "Customer name cannot be empty or null")
     private String name;
 
-    //the example suggested  using  NotNull
-    @NotBlank(message = "Customer email cannot be empty or null")
+    //the example suggested  using  NotNull, NotBlak sounds good as well
+    @Email(message = "Customer email is invalid")
     private String email;
 
     //the example suggested  using  NotNull
