@@ -17,7 +17,7 @@ public class Product {
     /*-------------Private Attributes-------------*/
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id; //could also be a Long (Wrapper)
+    private Long id; //could also be a Long (Wrapper)
 
     @NotBlank(message = "Product name cannot be empty or null")
     private String name;

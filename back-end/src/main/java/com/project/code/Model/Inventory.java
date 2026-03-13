@@ -10,10 +10,10 @@ public class Inventory {
     /*-------------Private Attributes-------------*/
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @JsonBackReference("inventory-product")
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "product_id") //the owner of the column is Product since you can't have a stock of something that doesn't exist.  That's why this attribute is a FK
     private Product product;
 

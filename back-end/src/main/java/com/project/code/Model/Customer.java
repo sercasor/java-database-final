@@ -12,7 +12,7 @@ public class Customer {
     /*-------------Private Attributes-------------*/
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     //the example suggested  NotNull
     @NotBlank(message = "Customer name cannot be empty or null")
