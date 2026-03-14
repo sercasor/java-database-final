@@ -1,34 +1,24 @@
 package com.project.code.Repo;
 
+import com.project.code.Model.Inventory;
+import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.stereotype.Repository;
 
-public interface InventoryRepository {
-// 1. Add the repository interface:
-//    - Extend JpaRepository<Inventory, Long> to inherit basic CRUD functionality.
-//    - This allows the repository to perform operations like save, delete, update, and find without having to implement these methods manually.
+import java.util.List;
 
-// Example: public interface InventoryRepository extends JpaRepository<Inventory, Long> {}
+@Repository
+public interface InventoryRepository  extends JpaRepository<Inventory,Long> {
 
-// 2. Add custom query methods:
-//    - **findByProductIdandStoreId**:
-//      - This method will allow you to find an inventory record by its product ID and store ID.
-//      - Return type: Inventory
-//      - Parameters: Long productId, Long storeId
-      
-// Example: public Inventory findByProductIdandStoreId(Long productId, Long storeId);
-
-//    - **findByStore_Id**:
-//      - This method will allow you to find a list of inventory records for a specific store.
-//      - Return type: List<Inventory>
-//      - Parameter: Long storeId
-      
-// Example: public List<Inventory> findByStore_Id(Long storeId);
-
-//    - **deleteByProductId**:
-//      - This method will allow you to delete all inventory records related to a specific product ID.
-//      - Return type: void
-//      - Parameter: Long productId
-//      - Use @Modifying and @Transactional annotations to ensure the database is modified correctly.
+    public Inventory findByProductIdandStoreId(Long productId, Long storeId);
+    public List<Inventory> findByStore_Id(Long id);
+    @Transactional //accordig to Spring JPA's  Transactionality doc, read-only methods don't need de Transactional annotation so this Delete methods is the only one that requires so
+    @Modifying //important for methods that modify the DB (in other words, they are not read-only). Otherwise, Transactional's  parameter can be set to readOnly = true, it's not necessary tho unless specifically modifying default behavior
+    public void deleteByProductId(Long id);
 
 
 
 }
+
+
