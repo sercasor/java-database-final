@@ -3,6 +3,7 @@ package com.project.code.Repo;
 import com.project.code.Model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,19 +12,67 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product,Long> {
     public List<Product> findAll();
     public List<Product> findByCategory(String category);
-    public List<Product> findByPriceBetween(Double price1, Double price2);
+    public List<Product> findByPriceBetween(double MinPrice, double MaxPrice); //query annotation should not be needed as o JOINs are used
     public List<Product> findBySku(String sku);
     public List<Product> findByName(String name);
 
     /**
      * Find products by a name pattern for a specific store
-     * @param pattern SQL pattern
+     * @param name (pattern)
+     * @param id
      * @return List of Product products
      */
-    public List<Product> findByNameLike(String pattern); //TODO: faltan cosas porque ?
+    @Query("SELECT i.product FROM Inventory i WHERE  i.product.category = :category AND i.store.id = :storeId")
+    public List<Product> findByNameLike(@Param("name")String name,@Param("id") Long id);
+
+    @Query("select i.product from Inventory i where i.product.category = :category and i.product.id = :id")//important: this is JPQL. see spring data JPA "Using Named Parameters". Parameters are marked by the colon (:) and i represents the object. we ca access its properties as if it was an object instead of creating traditional SQL querries with JOIN
+    public List<Product> findByCategoryAndStoreId(@Param("category") String category, @Param("id") Long id);
+
+
+    /**
+     * Find products by name and category for a specific store.
+     * @param id
+     * @param name
+     * @param category
+     * @return
+     */
+    @Query("SELECT i.product FROM Inventory i WHERE i.store.id = :storeId AND LOWER(i.product.name) LIKE LOWER(CONCAT('%', :pname, '%')) AND i.product.category = :category")  //using CONCAT is a good practice cause you'd have to add '%' when you call the method. Some kind of concatenation is required so % can be used as wildcards for any number of characters. LIKE expects a string. An example would be productRepository.findByStoreAndCategory(storeId, "%" + nombre + "%", category);
+    public List<Product> findByNameAndCategory(@Param("id") Long id,@Param("name") String name, @Param("category") String category);
+
+
+    //DOING
+
+    /**
+     * Find products by category for a specific store.
+     * @param id
+     * @param category
+     * @return
+     */
+    @Query("SELECT i.product FROM Inventory i WHERE i.store.id = :storeId AND i.product.category = :category")
+    public List<Product> findByCategoryAndStoreId(@Param("id") Long id, @Param("category") String category);
+
+    /**
+     * Find products by a name pattern (ignoring case).
+     * @param name
+     * @return
+     */
+    public List<Product> findByNameIgnoreCase(String name);
+
+    /**
+     * Find all products for a specific store.
+     * @param id
+     * @return
+     */
+    @Query("SELECT i.product FROM Inventory i WHERE i.store.id = :storeId")
+    public List<Product> findAllByStoreId(@Param("id") Long id);
+
+    /**
+     * Find products by a name pattern and category.
+     * @param name
+     * @param category
+     * @return
+     */
     public List<Product> findByNameAndCategory(String name, String category);
-    @Query("select p from Product p where u.emailAddress = ?1")
-    public List<Product> findByCategoryAndStoreId(String category, Long id); //TODO: faltan cosas porque en Product no hay store, sino Iventory auque detro de este último sí tenemos un Store?
 
 //    public List<Product> findById(Long id); //example suggests using this method but this is a reserved method in JPA so it got commented at least for now. Ref: docs.spring.io/spring-data/jpa/reference/repositories/query-keywords-reference.html#:~:text=findById%28ID%20identifier
 
