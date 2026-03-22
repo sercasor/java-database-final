@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents each line of the order (OrderDetails object)
+ */
 @Entity
 public class OrderItem {
     /*-------------Private Attributes-------------*/

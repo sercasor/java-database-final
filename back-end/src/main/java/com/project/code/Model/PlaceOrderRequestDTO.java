@@ -3,6 +3,9 @@ package com.project.code.Model;
 
 import java.util.List;
 
+/**
+ * This class contains all the info that is required for an order to be processed. It's relevant for inventory management
+ */
 public class PlaceOrderRequestDTO {
     private Long storeId;
     private String customerName;
