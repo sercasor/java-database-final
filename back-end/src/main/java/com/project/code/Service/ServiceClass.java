@@ -22,7 +22,12 @@ public class ServiceClass {
     private ProductRepository productRepository;
 
     //-------------------------------------Methods-------------------------------------
-    //TODO
+
+    /**
+     * Validates  that the product is not duplicate using Product ID and Store ID. Can be used for before adding a new inventory.
+     * @param inventory (A) product unit(s) that belong(s) to a store
+     * @return True if the inventory (product stock) already exists
+     */
     public boolean validateInventory (Inventory inventory){
         boolean isValid=false;
         Inventory inventoryToValidate= this.inventoryRepository.findByProductIdandStoreId(inventory.getProduct().getId(),inventory.getStore().getId());
@@ -34,7 +39,11 @@ public class ServiceClass {
         return isValid;
     }
 
-    //TODO
+    /**
+     * Validates if the product exists in the DB via its name.
+     * @param product Product object, represents a product (not necessarily associated with a store)
+     * @return True if the product exists
+     */
     public boolean validateProduct (Product product){
         boolean isValid=false;
         List <Product> productList= this.productRepository.findByName(product.getName());
@@ -43,12 +52,22 @@ public class ServiceClass {
         }
         return isValid;
     }
-    //TODO
+
+    /**
+     * Checks if a product exists in our DB using its ID
+     * @param id A product ID (not stock)
+     * @return
+     */
      public boolean ValidateProductId (long id){
             Optional<Product> product=this.productRepository.findById(id);
             return product.isPresent(); //returns a boolean
         }
-    //TODO
+
+    /**
+     * Fetches an inventory from the database that belongs to a product and a specific store
+     * @param inventory Inventory object that represents a product associated with a store
+     * @return Returns an inventory (stock unit)
+     */
     public Inventory getInventoryId (Inventory inventory){
         return this.inventoryRepository.findByProductIdandStoreId(inventory.getProduct().getId(),inventory.getStore().getId());
     }
