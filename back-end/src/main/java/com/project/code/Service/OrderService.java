@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service classto manage orders
+ */
 @Service
 public class OrderService {
     @Autowired

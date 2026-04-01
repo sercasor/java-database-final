@@ -1,6 +1,159 @@
 package com.project.code.Controller;
 
+import com.project.code.Model.CombinedRequest;
+import com.project.code.Model.Inventory;
+import com.project.code.Model.Product;
+import com.project.code.Repo.InventoryRepository;
+import com.project.code.Repo.ProductRepository;
+import com.project.code.Service.ServiceClass;
+import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/inventory")
 public class InventoryController {
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private InventoryRepository inventoryRepository;
+    @Autowired
+    private ServiceClass serviceClass; //validates product IDs and inventory
+    Logger logger = LoggerFactory.getLogger(InventoryController.class);
+
+    //TODO:this method requires reviewing
+    @PutMapping()//is the path REQURIED?
+    @Transactional
+    public Map<String, String> updateInventory (@RequestBody CombinedRequest combinedRequest){//contains both a Product and Inventory
+        Product requestProduct=combinedRequest.getProduct();
+        Inventory requestInventory=combinedRequest.getInventory();
+        boolean isValidProduct=false;
+        boolean isValidInventory=false;
+        Map<String, String> results=new HashMap<>();
+        String message;
+        Optional<Product> productRepo;
+        Inventory inventoryRepo;
+
+        try {
+            if(this.serviceClass.ValidateProductId(requestProduct.getId())){
+                isValidProduct=true;
+                productRepo= this.productRepository.findById(requestProduct.getId());
+                this.productRepository.save(requestProduct);
+                message="Successfully updated product";
+                results.put("message",message);
+                logger.info(message);
+            }else{
+                message="Product not found in database";
+                logger.error(message);
+                results.put("message",message);
+            }
+
+
+            if (!this.serviceClass.validateInventory(requestInventory)){
+                message="No data available for this product or store ID";
+                results.put("message",message);
+                logger.error(message);
+            }else{
+                inventoryRepo=this.serviceClass.getInventoryId(requestInventory);
+                /*Another option that seems unnecessary*/
+//                inventoryRepo.setId(requestInventory.getId());
+//                inventoryRepo.setProduct(requestInventory.getProduct());
+//                inventoryRepo.setStockLevel(requestInventory.getStockLevel());
+//                inventoryRepo.setStore(requestInventory.getStore());
+//                this.inventoryRepository.save(inventoryRepo);
+                this.inventoryRepository.save(requestInventory);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            results.put("message",e.getMessage());
+        }
+
+
+        return results;
+    }
+
+
+
+    @PostMapping()
+    public Map<String, String> saveInventory(@RequestBody Inventory inventory){
+        boolean inventoryIsValid;
+        Map<String, String> results= new HashMap<>();
+        String message;
+        try {
+        if (!this.serviceClass.validateInventory(inventory)){
+            message="Inventory doesn't exist";
+            this.logger.warn(message);
+
+
+                this.inventoryRepository.save(inventory);
+                message="data saved successfully";
+                results.put("message",message);
+            }
+        else {
+            message="the data is already pressent";
+            logger.error(message);
+            results.put("message",message);
+        }
+
+        }
+        catch (Exception e) {
+            logger.error(e.getMessage());
+            results.put("message",e.getMessage());
+        }
+
+        return  results;
+    }
+
+    @GetMapping("/{storeid}")
+    public Map<String, Object>getAllProducts(@RequestBody Inventory inventory,@PathVariable String storeid){
+
+        Map<String, Object> productsMap=new HashMap<>();
+        List<Product> allProductsList=this.productRepository.findAllByStoreId(inventory.getStore().getId());
+        productsMap.put("products",allProductsList);
+        return productsMap;
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // 1. Set Up the Controller Class:
 //    - Annotate the class with `@RestController` to indicate that this is a REST controller, which handles HTTP requests and responses.
 //    - Use `@RequestMapping("/inventory")` to set the base URL path for all methods in this controller. All endpoints related to inventory will be prefixed with `/inventory`.
@@ -54,5 +207,3 @@ public class InventoryController {
 //    - This method handles HTTP GET requests to validate if a specified quantity of a product is available in stock for a given store.
 //    - It checks the inventory for the product in the specified store and compares it to the requested quantity.
 //    - If sufficient stock is available, return `true`; otherwise, return `false`.
-
-}

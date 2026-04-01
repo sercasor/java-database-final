@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-//this service class is used to validate inventory and products, and fetch related data.
+/**
+ * this service class is used to validate inventory and products, and fetch related data.
+ */
 @Service
 public class ServiceClass {
 
