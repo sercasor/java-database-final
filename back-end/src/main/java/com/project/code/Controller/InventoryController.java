@@ -186,6 +186,24 @@ public class InventoryController {
 
     }
 
+    @GetMapping("validate/{quantity}/{storeId}/{productId}")
+    public boolean validateQuantity(
+            @PathVariable Integer quantity,
+            @PathVariable Long storeId,
+            @PathVariable Long productId
+    ){
+        Inventory inventory=this.inventoryRepository.findByProductIdandStoreId(productId,storeId);
+        boolean isValid;
+        if(quantity>inventory.getStockLevel()){
+            logger.error("Invalid quantity: Quantity requested is higher than the stock level of the store specified");
+            isValid=false;
+        }else {
+            logger.info("Valid quantity: There's enough stock for the requested product");
+            isValid=true;
+        }
+        return isValid;
+    }
+
 }
 
 
