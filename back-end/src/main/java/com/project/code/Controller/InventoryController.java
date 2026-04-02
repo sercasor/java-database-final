@@ -124,7 +124,7 @@ public class InventoryController {
 
     @GetMapping("filter/{category}/{name}/{storeid}")
     public Map<String, Object>getProductName(
-            @RequestBody Product product,
+//            @RequestBody Product product, //is this necessary?
             @PathVariable String category,
             @PathVariable String name,
             @PathVariable Long storeid){
@@ -133,17 +133,58 @@ public class InventoryController {
         if (category==null){
             productList=this.productRepository.findByNameLike(name,storeid);
             resultsMap.put("product",productList);
+            logger.info("category null, findByNameLike used"); //debug
         }else if (name==null){
             productList=this.productRepository.findByCategoryAndStoreId(category,storeid);
-
+            logger.info("name null, findByCategoryAndStoreId used");
             resultsMap.put("product",productList);
         }else{
             productList=this.productRepository.findByNameAndCategory(name,category);
+            logger.info("category and name are valid, findByNameAndCategory used");
             resultsMap.put("product",productList);
         }
         return resultsMap;
     }
+    @GetMapping("search/{name}/{storeId}")
+    public Map<String, Object> searchProduct(
+            @PathVariable String name,
+            @PathVariable Long storeid
+    ){
+        List<Product> productList;
+        Map<String, Object> resultsMap=new HashMap<>();
+        productList=this.productRepository.findByNameLike(name,storeid);
+        resultsMap.put("product",productList);
+        return resultsMap;
+    }
+    @Transactional
+    @DeleteMapping("/{id}")
+    public Map<String, Object>removeProduct(
+            @PathVariable Long id
+    ){
+        String message;
+        Map<String, Object> resultsMap=new HashMap<>();
+        try {
+            if(this.serviceClass.ValidateProductId(id)){
+                this.productRepository.deleteById(id);
+                message="Product deleted successfully";
+                logger.info(message);
+                resultsMap.put("message",message);
+            }else{
+                message="the product not present in database";
+                resultsMap.put("message",message);
+            }
 
+            return resultsMap;
+        }catch (IllegalArgumentException e){
+            message="Error when deleting the Product requested: ";
+            logger.error(message+e.getMessage());
+            resultsMap.put("message",message);
+            return resultsMap;
+        }
+
+
+
+    }
 
 }
 
