@@ -114,12 +114,34 @@ public class InventoryController {
     }
 
     @GetMapping("/{storeid}")
-    public Map<String, Object>getAllProducts(@RequestBody Inventory inventory,@PathVariable String storeid){
+    public Map<String, Object>getAllProducts(@RequestBody Inventory inventory,@PathVariable Long storeid){
 
         Map<String, Object> productsMap=new HashMap<>();
         List<Product> allProductsList=this.productRepository.findAllByStoreId(inventory.getStore().getId());
         productsMap.put("products",allProductsList);
         return productsMap;
+    }
+
+    @GetMapping("filter/{category}/{name}/{storeid}")
+    public Map<String, Object>getProductName(
+            @RequestBody Product product,
+            @PathVariable String category,
+            @PathVariable String name,
+            @PathVariable Long storeid){
+        List<Product> productList;
+        Map<String, Object> resultsMap=new HashMap<>();
+        if (category==null){
+            productList=this.productRepository.findByNameLike(name,storeid);
+            resultsMap.put("product",productList);
+        }else if (name==null){
+            productList=this.productRepository.findByCategoryAndStoreId(category,storeid);
+
+            resultsMap.put("product",productList);
+        }else{
+            productList=this.productRepository.findByNameAndCategory(name,category);
+            resultsMap.put("product",productList);
+        }
+        return resultsMap;
     }
 
 
