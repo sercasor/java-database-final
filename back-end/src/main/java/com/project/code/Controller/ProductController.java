@@ -106,13 +106,32 @@ public class ProductController {
 
         List<Product> productList;
         Map<String, Object> resultsMap=new HashMap<>();
-        String message;
         productList=this.productRepository.findAll();
         if (productList.isEmpty()||productList==null){
             logger.info("No products found in the database");
         }else {
             logger.info("Products successfully found in the database");
         }
+        resultsMap.put("product",productList);
+        return resultsMap;
+    }
+    @GetMapping("filter/{category}/{storeid}")
+    public Map<String, Object> getProductbyCategoryAndStoreId(
+            @PathVariable String category,
+            @PathVariable Long storeid
+
+    ){
+
+        List<Product> productList;
+        Map<String, Object> resultsMap=new HashMap<>();
+
+        productList=this.productRepository.findByCategoryAndStoreId(category,storeid);
+        if (productList.isEmpty()||productList==null){
+            logger.info("No products found for the provided category and store");
+        }else {
+            logger.info("Category Products successfully found in the store");
+        }
+
         resultsMap.put("product",productList);
         return resultsMap;
     }
