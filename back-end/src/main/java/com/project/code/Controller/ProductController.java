@@ -101,6 +101,21 @@ public class ProductController {
         resultsMap.put("product",productList);
         return resultsMap;
     }
+    @GetMapping()
+    public Map<String, Object> listProduct(){
+
+        List<Product> productList;
+        Map<String, Object> resultsMap=new HashMap<>();
+        String message;
+        productList=this.productRepository.findAll();
+        if (productList.isEmpty()||productList==null){
+            logger.info("No products found in the database");
+        }else {
+            logger.info("Products successfully found in the database");
+        }
+        resultsMap.put("product",productList);
+        return resultsMap;
+    }
     
 }
 
