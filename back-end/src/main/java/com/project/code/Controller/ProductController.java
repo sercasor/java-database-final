@@ -162,6 +162,25 @@ public class ProductController {
         return resultsMap;
 
     }
+
+    @GetMapping("/searchProduct/{name}")
+    public Map<String, Object> searchProduct(
+            @PathVariable String name
+
+    ){
+
+        List<Product> productList;
+        Map<String, Object> resultsMap=new HashMap<>();
+        productList=this.productRepository.findByNameIgnoreCase(name); //is tihs the best method? we also have findByNameLike() and findByName()
+        if (productList.isEmpty()||productList==null){
+            logger.info("No products found for the provided name");
+        }else {
+            logger.info("Products successfully found for the provided name");
+        }
+
+        resultsMap.put("products",productList);
+        return resultsMap;
+    }
     
 }
 
