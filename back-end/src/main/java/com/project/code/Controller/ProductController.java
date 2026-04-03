@@ -76,13 +76,28 @@ public class ProductController {
 
     }
 
-    public Map<String, Object> searchProduct(
+    @GetMapping("/category/{name}/{category}")
+    public Map<String, Object> filterbyCategoryProduct(
             @PathVariable String name,
-            @PathVariable Long storeid
+            @PathVariable String category
     ){
         List<Product> productList;
         Map<String, Object> resultsMap=new HashMap<>();
-        productList=this.productRepository.findByNameLike(name,storeid);
+        String message;
+
+        if (name==null){
+            productList=this.productRepository.findByCategory(category);
+            logger.info("Name not provided, product list found via category provided");
+            resultsMap.put("products",productList);
+
+        }else if (category==null){
+            productList=this.productRepository.findByName(name);
+            logger.info("Category not provided, product list found via Name provided");
+        } else {
+            productList=this.productRepository.findByNameAndCategory(name,category);
+            logger.info("Name and category provided, here's the product list found");
+        }
+
         resultsMap.put("product",productList);
         return resultsMap;
     }
