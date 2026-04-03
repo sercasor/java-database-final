@@ -135,6 +135,33 @@ public class ProductController {
         resultsMap.put("product",productList);
         return resultsMap;
     }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public Map <String,String> deleteProduct(
+            @PathVariable Long id
+    ){
+        Map<String, String> resultsMap=new HashMap<>();
+        String message;
+        try {
+            if (this.serviceClass.ValidateProductId(id)){
+                this.inventoryRepository.deleteByProductId(id);
+                logger.info("Inventory deleted successfully");
+                this.productRepository.deleteById(id);
+                message="Product got deleted successfully";
+                logger.info(message);
+                resultsMap.put("message",message);
+            }else {
+                message=" Product not found, couldn't delete";
+                logger.info(message);
+                resultsMap.put("message",message);
+            }
+
+        } catch (Exception e) {
+            logger.error("Error trying to delete Product: "+e.getMessage());        }
+        return resultsMap;
+
+    }
     
 }
 
