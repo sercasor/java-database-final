@@ -37,7 +37,6 @@ public class ProductController {
     @PostMapping()
     @Transactional
     public Map<String, Object>addProduct(@RequestBody Product requestProduct){
-        List<Product> productList;
         Map<String, Object> resultsMap=new HashMap<>();
         String message;
         try {
@@ -57,6 +56,25 @@ public class ProductController {
         return resultsMap;
     }
 
+    @PutMapping()
+    public Map<String, Object>  updateProduct(@RequestBody Product requestProduct){
+        Map<String, Object> resultsMap=new HashMap<>();
+        String message;
+        try {
+
+                this.productRepository.save(requestProduct);
+                message="Product got updated successfully";
+                logger.info(message);
+                resultsMap.put("message",message);
+
+        } catch (Exception e) {
+            message="Error trying to update Product: ";
+            logger.error(message+e.getMessage());
+            resultsMap.put("message",message);
+        }
+        return resultsMap;
+
+    }
 
     public Map<String, Object> searchProduct(
             @PathVariable String name,
