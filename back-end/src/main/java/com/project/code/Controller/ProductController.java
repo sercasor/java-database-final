@@ -1,6 +1,82 @@
 package com.project.code.Controller;
 
+import com.project.code.Model.CombinedRequest;
+import com.project.code.Model.Product;
+import com.project.code.Repo.InventoryRepository;
+import com.project.code.Repo.ProductRepository;
+import com.project.code.Service.ServiceClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/product")
 public class ProductController {
+
+    //----------------------PRIVATE ATTRIBUTES----------------------//
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private ServiceClass serviceClass;
+
+    @Autowired
+    private InventoryRepository inventoryRepository;
+
+    private Logger logger = LoggerFactory.getLogger(InventoryController.class);
+
+    //----------------------METHODS----------------------//
+
+    @PostMapping()
+    @Transactional
+    public Map<String, Object>addProduct(@RequestBody Product requestProduct){
+        List<Product> productList;
+        Map<String, Object> resultsMap=new HashMap<>();
+        String message;
+        try {
+            if (this.serviceClass.validateProduct(requestProduct)){
+                this.productRepository.save(requestProduct);
+                message="Product got updated successfully";
+                logger.info(message);
+                resultsMap.put("message",message);
+            }else {
+                message="Invalid Product (not found), couldn't update";
+                logger.info(message);
+                resultsMap.put("message",message);
+            }
+
+        } catch (Exception e) {
+            logger.error("Error trying to update Product: "+e.getMessage());        }
+        return resultsMap;
+    }
+
+
+    public Map<String, Object> searchProduct(
+            @PathVariable String name,
+            @PathVariable Long storeid
+    ){
+        List<Product> productList;
+        Map<String, Object> resultsMap=new HashMap<>();
+        productList=this.productRepository.findByNameLike(name,storeid);
+        resultsMap.put("product",productList);
+        return resultsMap;
+    }
+    
+}
+
+
+
+
+
+
+
 // 1. Set Up the Controller Class:
 //    - Annotate the class with `@RestController` to designate it as a REST controller for handling HTTP requests.
 //    - Map the class to the `/product` URL using `@RequestMapping("/product")`.
@@ -28,7 +104,7 @@ public class ProductController {
 //    - Return the product in a `Map<String, Object>` with key `products`.
 
 
- // 5. Define the `updateProduct` Method:
+// 5. Define the `updateProduct` Method:
 //    - Annotate with `@PutMapping` to handle PUT requests for updating an existing product.
 //    - Accept updated `Product` object in the request body.
 //    - Use `save()` method from `ProductRepository` to update the product.
@@ -42,7 +118,7 @@ public class ProductController {
 //    - Return filtered products in a `Map<String, Object>` with key `products`.
 
 
- // 7. Define the `listProduct` Method:
+// 7. Define the `listProduct` Method:
 //    - Annotate with `@GetMapping` to handle GET requests to fetch all products.
 //    - Fetch all products using `findAll()` method from `ProductRepository`.
 //    - Return all products in a `Map<String, Object>` with key `products`.
@@ -62,12 +138,7 @@ public class ProductController {
 //    - Return a success message with key `message` indicating product deletion.
 
 
- // 10. Define the `searchProduct` Method:
+// 10. Define the `searchProduct` Method:
 //    - Annotate with `@GetMapping("/searchProduct/{name}")` to search for products by `name`.
 //    - Use `findProductBySubName()` method from `ProductRepository` to search products by name.
 //    - Return search results in a `Map<String, Object>` with key `products`.
-
-
-  
-    
-}

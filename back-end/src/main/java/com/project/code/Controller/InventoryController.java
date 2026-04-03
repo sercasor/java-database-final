@@ -28,7 +28,7 @@ public class InventoryController {
     private InventoryRepository inventoryRepository;
     @Autowired
     private ServiceClass serviceClass; //validates product IDs and inventory
-    Logger logger = LoggerFactory.getLogger(InventoryController.class);
+    private Logger logger = LoggerFactory.getLogger(InventoryController.class);
 
     //TODO:this method requires reviewing
     @PutMapping()//is the path REQURIED?
