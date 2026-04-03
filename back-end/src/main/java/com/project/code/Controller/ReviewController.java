@@ -35,6 +35,10 @@ public class ReviewController {
 
     //----------------------METHODS (ENDPOINTS)----------------------//
 
+    /*
+    Quick explanation: a list of objects is created, containing a review object (an object whose values are a simplified version of the Review that we get using the repo query method) and a String which is the customer name.
+     This list is the value for the resultsMap, whose key is "customerName"
+     */
     @GetMapping("/{storeId}/{productId}")
     public Map<String, Object> getReviews(
             @PathVariable Long storeId,
