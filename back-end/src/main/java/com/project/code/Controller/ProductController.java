@@ -21,6 +21,7 @@ public class ProductController {
 
     //----------------------PRIVATE ATTRIBUTES----------------------//
 
+
     @Autowired
     private ProductRepository productRepository;
 
@@ -31,6 +32,7 @@ public class ProductController {
     private InventoryRepository inventoryRepository;
 
     private Logger logger = LoggerFactory.getLogger(InventoryController.class);
+
 
     //----------------------METHODS----------------------//
 
