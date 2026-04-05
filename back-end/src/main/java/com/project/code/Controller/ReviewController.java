@@ -31,7 +31,7 @@ public class ReviewController {
     @Autowired
     private CustomerRepository customerRepository;
 
-    private Logger logger = LoggerFactory.getLogger(InventoryController.class);
+    private Logger logger = LoggerFactory.getLogger(ReviewController.class);
 
     //----------------------METHODS (ENDPOINTS)----------------------//
 

@@ -31,7 +31,7 @@ public class ProductController {
     @Autowired
     private InventoryRepository inventoryRepository;
 
-    private Logger logger = LoggerFactory.getLogger(InventoryController.class);
+    private Logger logger = LoggerFactory.getLogger(ProductController.class);
 
 
     //----------------------METHODS----------------------//
