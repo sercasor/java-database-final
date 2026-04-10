@@ -32,7 +32,7 @@ public class ServiceClass {
      */
     public boolean validateInventory (Inventory inventory){
         boolean isValid=false;
-        Inventory inventoryToValidate= this.inventoryRepository.findByProductIdandStoreId(inventory.getProduct().getId(),inventory.getStore().getId());
+        Inventory inventoryToValidate= this.inventoryRepository.findByProductIdAndStoreId(inventory.getProduct().getId(),inventory.getStore().getId());
         if(inventoryToValidate!=null){
             isValid=true;
         }
@@ -71,7 +71,7 @@ public class ServiceClass {
      * @return Returns an inventory (stock unit)
      */
     public Inventory getInventoryId (Inventory inventory){
-        return this.inventoryRepository.findByProductIdandStoreId(inventory.getProduct().getId(),inventory.getStore().getId());
+        return this.inventoryRepository.findByProductIdAndStoreId(inventory.getProduct().getId(),inventory.getStore().getId());
     }
 
 

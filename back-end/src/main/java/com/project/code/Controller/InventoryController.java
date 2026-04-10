@@ -10,14 +10,12 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/inventory")
@@ -192,7 +190,7 @@ public class InventoryController {
             @PathVariable Long storeId,
             @PathVariable Long productId
     ){
-        Inventory inventory=this.inventoryRepository.findByProductIdandStoreId(productId,storeId);
+        Inventory inventory=this.inventoryRepository.findByProductIdAndStoreId(productId,storeId);
         boolean isValid;
         if(quantity>inventory.getStockLevel()){
             logger.error("Invalid quantity: Quantity requested is higher than the stock level of the store specified");

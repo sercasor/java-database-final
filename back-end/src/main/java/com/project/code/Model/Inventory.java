@@ -19,7 +19,7 @@ public class Inventory {
 
     @JoinColumn(name = "store_id") //the owner of the column is Store since it's the store where the stock of a product is stored. That's why this attribute is a FK
     @JsonBackReference("inventory-store")
-    @ManyToOne()
+    @ManyToOne
     private Store store; //the store where the inventory can be found
 
     private Integer stockLevel; //level of the product at the store

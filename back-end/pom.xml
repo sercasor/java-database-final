@@ -73,12 +73,20 @@
 	</dependencies>
 
 	<build>
+		<!--
+Source - https://stackoverflow.com/a/36429564
+Posted by Hohenheim, modified by community. See post 'Timeline' for change history
+Retrieved 2026-04-09, License - CC BY-SA 4.0
+-->
+
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.19.1</version>
 			</plugin>
 		</plugins>
+
 	</build>
 
 </project>

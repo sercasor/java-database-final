@@ -29,7 +29,7 @@ public class StoreController {
 
     //----------------------METHODS (ENDPOINTS)----------------------//
 
-    @PostMapping
+    @PostMapping("/placeOrder")
     @Transactional
     public Map<String, String> addStore(@RequestBody Store requestStore){
         String message;

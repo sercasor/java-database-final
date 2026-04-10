@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.List;
+
 @Entity
 public class Customer {
 
@@ -29,7 +31,7 @@ public class Customer {
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER) //Eager is a nice since the orderDetails and Customer will be frequently accessed together
     //ensures JSON serialization of related orders
     @JsonManagedReference //requires specific import
-    private OrderDetails orderDetails; //OrderItem represents the actual item so there's no relationship between it and the Customer since the details contains the date and such
+    private List<OrderDetails> orderDetails; //OrderItem represents the actual item so there's no relationship between it and the Customer since the details contains the date and such
 
     /*-------------Getters and setters-------------*/
     public long getId() {
@@ -64,11 +66,11 @@ public class Customer {
         this.phone = phone;
     }
 
-    public OrderDetails getOrderDetails() {
+    public List<OrderDetails> getOrderDetails() {
         return orderDetails;
     }
 
-    public void setOrderDetails(OrderDetails orderDetails) {
+    public void setOrderDetails(List<OrderDetails> orderDetails) {
         this.orderDetails = orderDetails;
     }
 

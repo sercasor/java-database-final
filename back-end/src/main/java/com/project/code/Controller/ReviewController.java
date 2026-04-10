@@ -1,12 +1,9 @@
 package com.project.code.Controller;
 
 
-import com.project.code.Model.Product;
 import com.project.code.Model.Review;
 import com.project.code.Repo.CustomerRepository;
 import com.project.code.Repo.ReviewRepository;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +48,7 @@ public class ReviewController {
         String customerName;
         Map<String, Object> resultsMap=new HashMap<>();
 
-        reviewList=this.reviewRepository.findByproductIdAndstoreId(storeId,productId);
+        reviewList=this.reviewRepository.findByProductIdAndStoreId(storeId,productId);
         if (reviewList.isEmpty()||reviewList==null){
             logger.info("No reviews found for the provided product and store");
         }else {

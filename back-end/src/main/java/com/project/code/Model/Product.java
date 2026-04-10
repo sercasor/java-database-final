@@ -12,6 +12,7 @@ import java.util.List;
  * This class represents each record  of the total stock rather than the number of available units or the place in which they are stored (warehouse)
  */
 @Entity
+@Table(name = "product", uniqueConstraints = @UniqueConstraint(columnNames = "sku"))
 public class Product {
 
     /*-------------Private Attributes-------------*/

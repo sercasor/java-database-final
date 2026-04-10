@@ -68,7 +68,7 @@ public class OrderService {
         //Create and Save OrderItems:For each product purchased, find the corresponding Inventory, update its stock level, and save the changes.
         List<PurchaseProductDTO>  purchaseProductDTOS=placeOrderRequestDTO.getPurchaseProduct();
         purchaseProductDTOS.forEach(purchaseProductDTO->{
-            Inventory savedInventory=this.inventoryRepository.findByProductIdandStoreId(purchaseProductDTO.getId(),placeOrderRequestDTO.getStoreId());
+            Inventory savedInventory=this.inventoryRepository.findByProductIdAndStoreId(purchaseProductDTO.getId(),placeOrderRequestDTO.getStoreId());
             int stockLevel=savedInventory.getStockLevel();
             savedInventory.setStockLevel(stockLevel-purchaseProductDTO.getQuantity());
             this.inventoryRepository.save(savedInventory);

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-
+@Entity
 public class Store {
     /*-------------Private Attributes-------------*/
     @Id
@@ -15,7 +15,7 @@ public class Store {
     private String name;
     @NotBlank(message = "Store address cannot be empty or null")
     private String address;
-    @OneToMany(mappedBy = "store")
+    @ManyToOne
     @JsonManagedReference("inventory-store")
     private Inventory inventory;
 

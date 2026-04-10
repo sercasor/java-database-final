@@ -13,7 +13,8 @@ public interface ReviewRepository extends MongoRepository<Review,String> {
      * @param storeId
      * @return
      */
-    public List<Review> findByproductIdAndstoreId(Long customerId,Long storeId);
+    public List<Review> findByProductIdAndStoreId(Long customerId, Long storeId);
 
 }
+
 
